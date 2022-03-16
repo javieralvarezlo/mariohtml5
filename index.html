@@ -62,6 +62,59 @@
 
     <script src="code/music.js"></script>
 
+    <script src="https://sgame.dit.upm.es/sgame_api/SGAME.js"></script>
+    <script>
+      window.onload = function () {
+        SGAME.init({ behaviour_when_no_more_los: "failure" });
+
+        ////////////////////////
+        //Only for development (start)
+        ////////////////////////
+        var settings = {};
+
+        settings.assets_path = "sgame_assets/";
+
+        settings.events = {};
+        settings.events["1"] = {
+          id: "1",
+          title: "dagame",
+          type: "damage",
+          description: "Event triggered on receiving damage",
+          event_frequency: "skill-dependent_medium",
+        };
+        //Add more events
+        // settings.events["eId"] = {
+        //    "id": "eId",
+        //    "type": "damage"
+        // };
+
+        settings.los = {};
+        settings.los["1001"] = {
+          id: "1001",
+          url: "SCORM2004Package_Test/presentation.html",
+          scorm_type: "sco",
+          scorm_version: "2004",
+          report_data: true,
+        };
+
+        settings.event_mapping = {};
+        settings.event_mapping["1"] = ["1001"];
+        //Add more mappings
+        //settings.event_mapping["eId"] = ["loId"];
+
+        SGAME.loadSettings(settings);
+        ////////////////////////
+        //Only for development (end)
+        ////////////////////////
+
+        /*
+               Before release:
+                  * Comment 'Only for development' block.
+                  * Change https://sgame.dit.upm.es/sgame_api/SGAME.js in script tag to /SGAME.js
+            */
+      };
+    </script>
+
     <script>
       $(document).ready(function () {
         new Enjine.Application().Initialize(new Mario.LoadingState(), 320, 240);
