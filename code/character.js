@@ -50,23 +50,6 @@ Mario.Character = function () {
 };
 
 Mario.Character.prototype = new Mario.NotchSprite(null);
-
-Mario.Character.prototype.TeleportStart = function () {
-  this.X = 32;
-  this.Y = 0;
-  this.PowerUpTime = 0;
-  this.Facing = 0;
-  this.PowerUpTime = 0;
-
-  this.XDeathPos = 0;
-  this.YDeathPos = 0;
-  this.DeathTime = 0;
-  this.WinTime = 0;
-  this.InvulnerableTime = 0;
-  this.Carried = null;
-
-  this.SetLarge(this.Large, this.Fire);
-};
 Mario.Character.prototype.Initialize = function (world) {
   this.Frozen = false;
   this.World = world;
@@ -330,11 +313,25 @@ Mario.Character.prototype.Move = function () {
   this.SubMove(this.Xa, 0);
   this.SubMove(0, this.Ya);
   if (this.Y > this.World.Level.Height * 16 + 16) {
-    if (confirm("Cuidao que tecaes")) {
-      this.TeleportStart();
-      return;
-    }
-    this.Die();
+    var that = this;
+    this.World.Paused = true;
+    this.Frozen = true;
+
+    SGAME.triggerLO(3, function (pass) {
+      if (pass) {
+        that.X = 32;
+        that.Y = 0;
+        that.Facing = 0;
+        that.InvulnerableTime = 32;
+        that.Xa = 0; // IF on ground?
+        Enjine.KeyboardInput.ReleaseKeys();
+        Enjine.Resources.PlaySound("1up");
+      } else {
+        that.Die();
+      }
+      that.World.Paused = false;
+      that.Frozen = false;
+    });
   }
 
   if (this.X < 0) {
@@ -712,11 +709,14 @@ Mario.Character.prototype.GetHurt = function () {
   SGAME.triggerLO(1, function (pass) {
     if (pass) {
       that.InvulnerableTime = 32;
-      Enjine.KeyboardInput.ReleaseKeys();
-      that.Xa = 0;
       Enjine.Resources.PlaySound("1up");
+      if (that.OnGround) {
+        that.Xa = 0;
+      }
+    } else {
+      that.GetDamage();
     }
-    pass ? (that.InvulnerableTime = 32) : that.GetDamage();
+    Enjine.KeyboardInput.ReleaseKeys();
     that.World.Paused = false;
     that.Frozen = false;
   });
@@ -760,6 +760,21 @@ Mario.Character.prototype.GetFlower = function () {
     return;
   }
 
+  var that = this;
+  this.World.Paused = true;
+  this.Frozen = true;
+
+  SGAME.triggerLO(2, function (pass) {
+    if (pass) {
+      that.GetFlowerPower();
+    }
+    Enjine.KeyboardInput.ReleaseKeys();
+    that.World.Paused = false;
+    that.Frozen = false;
+  });
+};
+
+Mario.Character.prototype.GetFlowerPower = function () {
   if (!this.Fire) {
     this.World.Paused = true;
     this.PowerUpTime = 18;
@@ -776,6 +791,21 @@ Mario.Character.prototype.GetMushroom = function () {
     return;
   }
 
+  var that = this;
+  this.World.Paused = true;
+  this.Frozen = true;
+
+  SGAME.triggerLO(2, function (pass) {
+    if (pass) {
+      that.GetMushroomPower();
+    }
+    Enjine.KeyboardInput.ReleaseKeys();
+    that.World.Paused = false;
+    that.Frozen = false;
+  });
+};
+
+Mario.Character.prototype.GetMushroomPower = function () {
   if (!this.Large) {
     this.World.Paused = true;
     this.PowerUpTime = 18;

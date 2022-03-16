@@ -77,10 +77,26 @@
         settings.events = {};
         settings.events["1"] = {
           id: "1",
-          title: "dagame",
+          title: "damage",
           type: "damage",
           description: "Event triggered on receiving damage",
-          event_frequency: "skill-dependent_medium",
+          event_frequency: "skill-dependent_high",
+        };
+
+        settings.events["2"] = {
+          id: "2",
+          title: "powerup",
+          type: "reward",
+          description: "Event triggered on picking up a power up",
+          event_frequency: "high",
+        };
+
+        settings.events["3"] = {
+          id: "3",
+          title: "void",
+          type: "damage",
+          description: "Event triggered on falling to void",
+          event_frequency: "skill-dependant_medium",
         };
         //Add more events
         // settings.events["eId"] = {
@@ -99,6 +115,8 @@
 
         settings.event_mapping = {};
         settings.event_mapping["1"] = ["1001"];
+        settings.event_mapping["2"] = ["1001"];
+        settings.event_mapping["3"] = ["1001"];
         //Add more mappings
         //settings.event_mapping["eId"] = ["loId"];
 
