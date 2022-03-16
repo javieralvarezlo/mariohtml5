@@ -323,7 +323,7 @@ Mario.Character.prototype.Move = function () {
         that.Y = 0;
         that.Facing = 0;
         that.InvulnerableTime = 32;
-        that.Xa = 0; // IF on ground?
+        that.Xa = 0;
         Enjine.KeyboardInput.ReleaseKeys();
         Enjine.Resources.PlaySound("1up");
       } else {
@@ -767,6 +767,8 @@ Mario.Character.prototype.GetFlower = function () {
   SGAME.triggerLO(2, function (pass) {
     if (pass) {
       that.GetFlowerPower();
+    } else {
+      Enjine.Resources.PlaySound("powerdown");
     }
     Enjine.KeyboardInput.ReleaseKeys();
     that.World.Paused = false;
@@ -798,6 +800,8 @@ Mario.Character.prototype.GetMushroom = function () {
   SGAME.triggerLO(2, function (pass) {
     if (pass) {
       that.GetMushroomPower();
+    } else {
+      Enjine.Resources.PlaySound("powerdown");
     }
     Enjine.KeyboardInput.ReleaseKeys();
     that.World.Paused = false;
